@@ -3,6 +3,8 @@ import { ResponseError } from '../error/response-error.js';
 const errorMiddleware = async (err, req, res, next) => {
   if (!err) {
     next();
+
+    return;
   }
 
   if (err instanceof ResponseError) {
@@ -13,10 +15,11 @@ const errorMiddleware = async (err, req, res, next) => {
       })
       .end();
   } else {
+    console.log(err.message);
     res
       .status(500)
       .json({
-        errors: err.message,
+        errors: 'ada kesalahan',
       })
       .end();
   }
