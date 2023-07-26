@@ -1,5 +1,4 @@
 import supertest from 'supertest';
-import { prismaClient } from '../app/database.js';
 import { web } from '../app/web.js';
 import { logger } from '../app/logging.js';
 import { createTestUser, removeTestUser } from './test.util.js';
@@ -54,5 +53,12 @@ describe('POST /api/users/login', function () {
     expect(result.status).toBe(200);
     expect(result.body.data.token).toBeDefined();
     expect(result.body.data.token).not.toBe('test');
+  });
+});
+describe('GET /api/users/data', function () {
+  it('should get users data', async () => {
+    const result = await supertest(web).get('/api/users/data');
+    logger.info(result.body);
+    expect(result.status).toBe(200);
   });
 });

@@ -70,7 +70,14 @@ const login = async (request) => {
     },
   });
 };
+
+const getUser = async () => {
+  const users = await prismaClient.user.findMany();
+
+  return users;
+};
 export default {
   register,
   login,
+  getUser,
 };
