@@ -2,29 +2,26 @@ import supertest from 'supertest';
 import { prismaClient } from '../app/database.js';
 import { web } from '../app/web.js';
 import { logger } from '../app/logging.js';
+import { createTestUser, removeTestUser } from './test.util.js';
 
 describe('POST /api/users', function () {
   afterEach(async () => {
-    await prismaClient.user.deleteMany({
-      where: {
-        username: 'rioaldie',
-      },
-    });
+    await removeTestUser();
   });
 
   it('should can register new user', async () => {
     const result = await supertest(web).post('/api/users').send({
-      username: 'rioaldie',
+      username: 'test',
       password: 'rahasia',
       name: 'Rio Aldi',
     });
-    logger.info(result.body);
+    logger.info(result.status);
     expect(result.status).toBe(200);
-    expect(result.body.data.username).toBe('rioaldie');
+    expect(result.body.data.username).toBe('test');
     expect(result.body.data.name).toBe('Rio Aldi');
     expect(result.body.data.password).toBeUndefined();
   });
-  it('should can register new user', async () => {
+  it('should cant register new user', async () => {
     const result = await supertest(web).post('/api/users').send({
       username: '',
       password: '',
@@ -33,5 +30,29 @@ describe('POST /api/users', function () {
     logger.info(result.body);
     expect(result.status).toBe(400);
     expect(result.error).toBeDefined();
+  });
+});
+
+describe('POST /api/users/login', function () {
+  beforeEach(async () => {
+    await createTestUser();
+  });
+
+  afterEach(async () => {
+    await removeTestUser();
+  });
+  it('should can login', async () => {
+    const result = await supertest(web)
+      .post('/api/users/login')
+      .send({
+        username: 'test',
+        password: 'rahasia',
+      });
+
+    logger.info(result.body);
+
+    expect(result.status).toBe(200);
+    expect(result.body.data.token).toBeDefined();
+    expect(result.body.data.token).not.toBe('test');
   });
 });
