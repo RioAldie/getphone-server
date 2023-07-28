@@ -25,7 +25,12 @@ const createPhone = async (request) => {
     },
   });
 };
+const getSmartphones = async () => {
+  const smartphones = await prismaClient.smartphone.findMany();
 
+  return smartphones;
+};
 export default {
   createPhone,
+  getSmartphones,
 };
