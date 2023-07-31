@@ -14,5 +14,6 @@ publicRouter.get(
   phoneController.getSmartphonesByBrand
 );
 publicRouter.patch('/api/phone/update', phoneController.updatePhone);
+publicRouter.delete('/api/phone/delete', phoneController.deletePhone);
 
 export { publicRouter };

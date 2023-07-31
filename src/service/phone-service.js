@@ -2,6 +2,7 @@ import { prismaClient } from '../app/database';
 import { ResponseError } from '../error/response-error';
 import {
   phoneBrandValidation,
+  phoneDeleteValidation,
   phoneUpdateValidation,
   phoneValidation,
 } from '../validation/phone-validation';
@@ -131,10 +132,30 @@ const updatePhone = async (request) => {
     },
   });
 };
+const deleteSmartphone = async (request) => {
+  const smartphone = validate(phoneDeleteValidation, request);
+
+  const totalSmartphone = await prismaClient.smartphone.count({
+    where: {
+      id: smartphone.id,
+    },
+  });
+
+  if (totalSmartphone !== 1) {
+    throw new ResponseError(404, 'Smartphone not found');
+  }
+
+  return prismaClient.smartphone.delete({
+    where: {
+      id: smartphone.id,
+    },
+  });
+};
 export default {
   createPhone,
   getSmartphones,
   getSmartphoneByID,
   getSmartphonesByBrand,
   updatePhone,
+  deleteSmartphone,
 };

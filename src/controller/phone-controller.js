@@ -50,10 +50,21 @@ const updatePhone = async (req, res, next) => {
     next(e);
   }
 };
+const deletePhone = async (req, res, next) => {
+  try {
+    const result = await phoneService.deleteSmartphone(req.body);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 export default {
   createPhone,
   getSmartphones,
   getSmartphoneByID,
   getSmartphonesByBrand,
   updatePhone,
+  deletePhone,
 };

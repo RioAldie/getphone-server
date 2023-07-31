@@ -13,8 +13,12 @@ const phoneUpdateValidation = Joi.object({
   link: Joi.string().max(100).optional(),
   image: Joi.string().max(100).optional(),
 });
+const phoneDeleteValidation = Joi.object({
+  id: Joi.number().max(11).required(),
+});
 export {
   phoneValidation,
   phoneBrandValidation,
   phoneUpdateValidation,
+  phoneDeleteValidation,
 };

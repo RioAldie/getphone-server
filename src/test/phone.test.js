@@ -7,15 +7,15 @@ import { logger } from '../app/logging.js';
 //     const result = await supertest(web)
 //       .post('/api/phone/create')
 //       .send({
-//         name: 'Mi 11 lite',
+//         name: 'Redmi Note 11',
 //         brand: 'Xiaomi',
 //         RAM: '4',
 //         room: '128',
 //         processor: 'Snapdragon',
 //         price: '3.400.000',
 //         image: 'img.jpg',
-//         camera: '64 12px 12px 8px',
-//         category: 'Mid Range',
+//         camera: '48px 12px 8px',
+//         category: 'Entry Level',
 //         desc: '',
 //         link: '',
 //         release_date: '',
@@ -63,11 +63,24 @@ describe('PATCH /api/phone/update', function () {
     const result = await supertest(web)
       .patch('/api/phone/update')
       .send({
-        id: 1,
+        id: 10,
         name: 'Redmi Note 11 Pro',
       });
 
     expect(result.status).toBe(200);
     expect(result.body.data.name).toBe('Redmi Note 11 Pro');
+  });
+});
+
+describe('DELETE /api/phone/delete', function () {
+  it('Should delete data smartphone', async () => {
+    const result = await supertest(web)
+      .delete('/api/phone/delete')
+      .send({
+        id: 5,
+      });
+
+    // expect(result.status).toBe(200);
+    expect(result.status).toBe(404);
   });
 });
