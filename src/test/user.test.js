@@ -1,5 +1,4 @@
 import supertest from 'supertest';
-import { prismaClient } from '../app/database.js';
 import { web } from '../app/web.js';
 import { logger } from '../app/logging.js';
 import { createTestUser, removeTestUser } from './test.util.js';
@@ -15,7 +14,7 @@ describe('POST /api/users', function () {
       password: 'rahasia',
       name: 'Rio Aldi',
     });
-    logger.info(result.status);
+
     expect(result.status).toBe(200);
     expect(result.body.data.username).toBe('test');
     expect(result.body.data.name).toBe('Rio Aldi');
@@ -27,7 +26,7 @@ describe('POST /api/users', function () {
       password: '',
       name: '',
     });
-    logger.info(result.body);
+
     expect(result.status).toBe(400);
     expect(result.error).toBeDefined();
   });
@@ -49,10 +48,15 @@ describe('POST /api/users/login', function () {
         password: 'rahasia',
       });
 
-    logger.info(result.body);
-
     expect(result.status).toBe(200);
     expect(result.body.data.token).toBeDefined();
     expect(result.body.data.token).not.toBe('test');
+  });
+});
+describe('GET /api/users/data', function () {
+  it('should get users data', async () => {
+    const result = await supertest(web).get('/api/users/data');
+
+    expect(result.status).toBe(200);
   });
 });

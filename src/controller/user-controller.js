@@ -20,7 +20,18 @@ const login = async (req, res, next) => {
     next(e);
   }
 };
+const getUsers = async (req, res, next) => {
+  try {
+    const result = await userService.getUser();
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 export default {
   register,
   login,
+  getUsers,
 };
