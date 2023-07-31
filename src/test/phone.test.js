@@ -45,8 +45,6 @@ describe('GET /api/phone/id', function () {
       id: 2,
     });
 
-    logger.info(result.body);
-
     expect(result.status).toBe(200);
     expect(result.body.data.name).toBe('Realme C3');
   });
@@ -56,7 +54,20 @@ describe('GET /api/phone/brand', function () {
     const result = await supertest(web).get('/api/phone/brand').send({
       brand: 'Xiaomi',
     });
-    logger.info(result.body);
+
     expect(result.status).toBe(200);
+  });
+});
+describe('PATCH /api/phone/update', function () {
+  it('Should update data', async () => {
+    const result = await supertest(web)
+      .patch('/api/phone/update')
+      .send({
+        id: 1,
+        name: 'Redmi Note 11 Pro',
+      });
+
+    expect(result.status).toBe(200);
+    expect(result.body.data.name).toBe('Redmi Note 11 Pro');
   });
 });

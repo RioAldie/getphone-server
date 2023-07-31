@@ -2,6 +2,7 @@ import { prismaClient } from '../app/database';
 import { ResponseError } from '../error/response-error';
 import {
   phoneBrandValidation,
+  phoneUpdateValidation,
   phoneValidation,
 } from '../validation/phone-validation';
 import { validate } from '../validation/validation.js';
@@ -36,7 +37,7 @@ const getSmartphones = async () => {
 };
 const getSmartphoneByID = async (request) => {
   const smartphoneRequest = validate(phoneValidation, request);
-  console.log(smartphoneRequest.id);
+
   const phone = await prismaClient.smartphone.findUnique({
     where: {
       id: smartphoneRequest.id,
@@ -70,7 +71,7 @@ const getSmartphoneByID = async (request) => {
 
 const getSmartphonesByBrand = async (request) => {
   const smartphoneRequest = validate(phoneBrandValidation, request);
-  console.log(smartphoneRequest.brand);
+
   const phone = await prismaClient.smartphone.findMany({
     where: {
       brand: smartphoneRequest.brand,
@@ -101,9 +102,39 @@ const getSmartphonesByBrand = async (request) => {
 
   return phone;
 };
+const updatePhone = async (request) => {
+  const smartphoneRequest = validate(phoneUpdateValidation, request);
+  console.log('update: ', smartphoneRequest);
+  const totalSmartphoneInDatabase =
+    await prismaClient.smartphone.count({
+      where: {
+        id: smartphoneRequest.id,
+      },
+    });
+
+  if (totalSmartphoneInDatabase !== 1) {
+    throw new ResponseError(404, 'smartphone not found');
+  }
+  const data = {};
+
+  if (smartphoneRequest.name) {
+    data.name = smartphoneRequest.name;
+  }
+
+  return prismaClient.smartphone.update({
+    where: {
+      id: smartphoneRequest.id,
+    },
+    data: data,
+    select: {
+      name: true,
+    },
+  });
+};
 export default {
   createPhone,
   getSmartphones,
   getSmartphoneByID,
   getSmartphonesByBrand,
+  updatePhone,
 };

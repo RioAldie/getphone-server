@@ -6,5 +6,15 @@ const phoneValidation = Joi.object({
 const phoneBrandValidation = Joi.object({
   brand: Joi.string().max(100).required(),
 });
-
-export { phoneValidation, phoneBrandValidation };
+const phoneUpdateValidation = Joi.object({
+  id: Joi.number().max(11).required(),
+  name: Joi.string().max(100).optional(),
+  price: Joi.string().max(100).optional(),
+  link: Joi.string().max(100).optional(),
+  image: Joi.string().max(100).optional(),
+});
+export {
+  phoneValidation,
+  phoneBrandValidation,
+  phoneUpdateValidation,
+};

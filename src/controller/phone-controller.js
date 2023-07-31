@@ -40,9 +40,20 @@ const getSmartphonesByBrand = async (req, res, next) => {
     next(e);
   }
 };
+const updatePhone = async (req, res, next) => {
+  try {
+    const result = await phoneService.updatePhone(req.body);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 export default {
   createPhone,
   getSmartphones,
   getSmartphoneByID,
   getSmartphonesByBrand,
+  updatePhone,
 };

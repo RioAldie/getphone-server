@@ -13,5 +13,6 @@ publicRouter.get(
   '/api/phone/brand',
   phoneController.getSmartphonesByBrand
 );
+publicRouter.patch('/api/phone/update', phoneController.updatePhone);
 
 export { publicRouter };
